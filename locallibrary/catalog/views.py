@@ -1,13 +1,15 @@
 from django.shortcuts import render
+from django.views import generic
 from .models import Book, Author, BookInstance, Genre
 
 # Create your views here.
 
+# function-based definition for view (see BookListView for class-based)
 def index(request):
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
 
-    num_instances_available = BookInstance.objects.filter(status__extract='a').count()
+    num_instances_available = BookInstance.objects.filter(status__exact='a').count()
 
     num_authors = Author.objects.count()
 
@@ -19,4 +21,8 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
-    # /Django/Home_page#template
+
+# class-based definition for view (see index for function-based)
+class BookListView(generic.ListView):
+    model = Book
+    
